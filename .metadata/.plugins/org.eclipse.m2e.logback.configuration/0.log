@@ -1658,3 +1658,4 @@
 2021-12-22 18:29:38,098 [Worker-88: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2021-12-22 18:29:38,098 [Worker-88: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\excelproject\excelreport\src\test\resources
 2021-12-22 18:29:46,160 [Worker-90: Launching excelreport (19)] INFO  o.e.m.i.launch.MavenLaunchDelegate - C:\excelproject\excelreport
+2021-12-22 18:29:46,160 [Worker-90: Launching excelreport (19)] INFO  o.e.m.i.launch.MavenLaunchDelegate -  mvn -B assembly:assembly -Dstyle.color=always
