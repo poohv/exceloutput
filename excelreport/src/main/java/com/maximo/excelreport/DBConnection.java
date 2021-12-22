@@ -12,8 +12,8 @@ public class DBConnection {
 	public static Connection getConnection() {
 			try {
 				
-				String user = "root"; 
-                String pw = "1234";
+				String user = ""; 
+                String pw = "";
                 String url = "jdbc:mariadb://127.0.0.1:3306/test";
                 
                 Class.forName("org.mariadb.jdbc.Driver");        
