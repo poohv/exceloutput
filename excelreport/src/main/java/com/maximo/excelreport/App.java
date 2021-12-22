@@ -24,11 +24,7 @@ public class App
     	Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		
-		String user = "root"; 
-        String pw = "1234";
-        String url = "jdbc:mariadb://127.0.0.1:3306/test";
-		
+				
 		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 		String file_size = null;
 		String file_path = "C:\\temp\\"+date.format(new Date())+"_Report";
