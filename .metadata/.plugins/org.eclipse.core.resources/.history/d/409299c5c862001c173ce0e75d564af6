@@ -1,0 +1,128 @@
+package com.maximo.excelreport;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.util.Scanner;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.io.FileOutputStream;
+import java.io.File;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
+		String file_size = null;
+		String file_path = null;
+		
+		Workbook xworkbook = null; //엑셀파일 객체 생성
+		Sheet xSheet = null; //시트 객체 생성
+		Row xRow = null; //행 객체 생성
+		Cell xCell = null; //열 객체 생성
+		
+		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			
+		try {
+							
+			xworkbook = new SXSSFWorkbook(); //엑셀파일 생성
+			xSheet = xworkbook.createSheet("sheet1"); //시트 생성
+			
+			String quary = "SELECT s_doc_no, description FROM ENGINEER.DOCUMENT";
+							
+	        conn = DBConnection.getConnection();
+			pstm = conn.prepareStatement(quary);
+			rs = pstm.executeQuery();
+			
+			//파일 경로 입력
+			System.out.println("Enter a path to save .xlsx file: ");
+			Scanner scan = new Scanner(System.in);
+			file_path = scan.nextLine();
+			scan.close();
+			
+			//파일 생성
+			File file = new File(file_path + ".xlsx"); // 파일 확장자 .xlsx로 고정		
+			FileOutputStream fos = new FileOutputStream(file);
+			
+			System.out.println("Write Start " + date.format(new Date()));
+				
+			//첫 행 입력
+			xRow = xSheet.createRow(0);
+			xCell = xRow.createCell(0);
+			xCell.setCellValue("S_DWG_NO");
+			xCell = xRow.createCell(1);
+			xCell.setCellValue("DESCRIPTION");
+			xCell = xRow.createCell(2);				
+
+			int row = 1; //row번째 행
+				
+			while(rs.next()) {
+				
+				// quary 결과에서 데이터 가져오기
+				String s_dwg_no = rs.getString(1); // 쿼리 select문의 첫번째 열
+				String description = rs.getString(2); // 쿼리 select문의 두번째 열
+                //String description = rs.getString(description) 처럼 숫자 대신 컬럼명 입력해도 문제 없음
+				
+				// 데이터 입력
+				xRow = xSheet.createRow(row);
+				xCell = xRow.createCell(0);
+				xCell.setCellValue(s_dwg_no);
+				xCell = xRow.createCell(1);
+				xCell.setCellValue(description);
+				
+				row++;		
+			}
+				
+			rs.close();
+			pstm.close();
+			conn.close();
+			
+			// 파일 쓰기
+			xworkbook.write(fos);
+			if(fos != null) {
+				fos.close();
+			}
+			System.out.println("Write complete " + date.format(new Date()));
+									
+				
+		} catch(SQLException sqle) {
+				
+			System.out.println("quary Error");
+			sqle.printStackTrace();
+				
+		} catch (Exception e) {
+				
+			System.out.print(e);
+			
+		} finally {
+				
+			try {
+					
+				if(rs != null) { rs.close();}
+				if(pstm != null) { pstm.close();}
+				if(conn != null) { conn.close();}
+					
+			} catch(Exception e) {
+					
+				throw new RuntimeException(e.getMessage());
+					
+			}
+			
+		}
+    }
+}

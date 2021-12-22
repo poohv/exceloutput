@@ -1,0 +1,5 @@
+package com.maximo.excelreport;
+
+public class DBConnection {
+
+}
